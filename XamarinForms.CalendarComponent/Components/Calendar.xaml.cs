@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
+using XamarinForms.CalendarComponent.Models;
 
 namespace XamarinForms.CalendarComponent.Components
 {
@@ -25,6 +26,21 @@ namespace XamarinForms.CalendarComponent.Components
                 defaultValue: true,
                 propertyChanged: OnShowDaysFromOtherMonthsPropertyChanged);
 
+        public static readonly BindableProperty SpecialDaysProperty = BindableProperty.Create(nameof(SpecialDays), typeof(ObservableCollection<object>), typeof(SpecialDays), new ObservableCollection<object>(), BindingMode.TwoWay, propertyChanged: SpecialDaysPropertyChangedDelegate);
+
+        private static void SpecialDaysPropertyChangedDelegate(BindableObject bindable, object oldValue, object newValue)
+        {
+
+            var calendar = bindable as Calendar;
+            calendar.UpdateCalendarDays();
+        }
+
+        public List<SpecialDays> SpecialDays
+        {
+            get =>
+(List<SpecialDays>)GetValue(SpecialDaysProperty);
+            set => SetValue(SpecialDaysProperty, value);
+        }
         private static void OnShowDaysFromOtherMonthsPropertyChanged(BindableObject bindable, object oldValue,
             object newValue)
         {
@@ -37,10 +53,22 @@ namespace XamarinForms.CalendarComponent.Components
             get => (bool) GetValue(ShowDaysFromOtherMonthsProperty);
             set => SetValue(ShowDaysFromOtherMonthsProperty, value);
         }
-
+        public bool ShowSpecialDays
+        {
+            get => (bool)GetValue(ShowDaysFromOtherMonthsProperty);
+            set => SetValue(ShowDaysFromOtherMonthsProperty, value);
+        }
         #endregion
 
-        #region ShowWeekendsProperty
+        #region ShowSpecialDaysProperty
+
+        public static readonly BindableProperty ShowSpecialDaysProperty =
+            BindableProperty.Create(
+                propertyName: nameof(ShowSpecialDays),
+                returnType: typeof(bool),
+                declaringType: typeof(Calendar),
+                defaultValue: true,
+                propertyChanged: OnShowSpecialDaysChanged);
 
         public static readonly BindableProperty ShowWeekendsProperty =
             BindableProperty.Create(
@@ -49,8 +77,10 @@ namespace XamarinForms.CalendarComponent.Components
                 declaringType: typeof(Calendar),
                 defaultValue: true,
                 propertyChanged: OnShowWeekendsChanged);
-
-        private static void OnShowWeekendsChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnShowSpecialDaysChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+            private static void OnShowWeekendsChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var calendar = bindable as Calendar;
 
@@ -389,6 +419,7 @@ namespace XamarinForms.CalendarComponent.Components
                     HorizontalOptions = LayoutOptions.CenterAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     ControlTemplate = DayControlTemplate,
+                    BackgroundColor = Color.Orange,
                     Date = date,
                 };
                 
@@ -400,14 +431,21 @@ namespace XamarinForms.CalendarComponent.Components
                 {
                     calendarDay.Opacity = 0;
                 }
-
+                var todaysDate = DateTime.Now.ToShortDateString();
+                var cellDate = date.ToShortDateString();
+                var test = ShowSpecialDays;
+        
                 Grid.SetColumn(calendarDay, column);
                 Grid.SetRow(calendarDay, row);
-
+                
                 var tapGestureRecognizer = new TapGestureRecognizer();
                 tapGestureRecognizer.Tapped += CalendarDay_OnTapped;
                 calendarDay.GestureRecognizers.Add(tapGestureRecognizer);
+                if (cellDate == todaysDate && ShowSpecialDays)
+                {
 
+                    calendarDay.BackgroundColor = Color.Purple;
+                }
                 _days.Add(calendarDay);
                 GridDays.Children.Add(calendarDay);
                 
@@ -420,7 +458,7 @@ namespace XamarinForms.CalendarComponent.Components
             {
                 calendarDay.Date = date;
                 calendarDay.ControlTemplate = DayControlTemplate;
-
+                calendarDay.BackgroundColor = Color.Orange;
                 if (isVisible)
                 {
                     DayUpdated?.Invoke(this, new CalendarDayAddedEventArgs(calendarDay));
@@ -430,7 +468,7 @@ namespace XamarinForms.CalendarComponent.Components
                 {
                     if (isVisible)
                     {
-                        calendarDay.Opacity = 1;
+                     calendarDay.Opacity = 1;
                     }
                     else
                     {
@@ -506,7 +544,6 @@ namespace XamarinForms.CalendarComponent.Components
                     {
                         ControlTemplate = WeekDayHeaderControlTemplate
                     };
-
                     Grid.SetColumn(weekDayControl, column);
 
                     GridWeekDayHeaders.Children.Add(weekDayControl);

@@ -1,5 +1,6 @@
 using System;
 using Xamarin.Forms;
+using XamarinForms.CalendarComponent.Models;
 
 namespace XamarinForms.CalendarComponent.Components
 {
@@ -29,12 +30,19 @@ namespace XamarinForms.CalendarComponent.Components
                 propertyName: nameof(IsSelected),
                 returnType: typeof(bool),
                 declaringType: typeof(CalendarDay));
+        
+        public static readonly BindableProperty ShowSpecialDays =
+        BindableProperty.Create(
+            propertyName: nameof(SpecialDays),
+            returnType: typeof(bool),
+            declaringType: typeof(SpecialDays));
 
         public bool IsSelected
         {
             get => (bool) GetValue(IsSelectedProperty);
             set => SetValue(IsSelectedProperty, value);
         }
+     
 
         #endregion
 

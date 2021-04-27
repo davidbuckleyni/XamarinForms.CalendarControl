@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"              
+
+            xmlns:controls="clr-namespace:XamarinForms.CalendarComponent.Components;assembly=XamarinForms.CalendarComponent"
+  xmlns:converters="clr-namespace:XamarinForms.CalendarComponent.Converters;assembly=XamarinForms.CalendarComponent"
+          
+             x:Class="App1.Views.CalPage">
+    <ContentPage.Resources>
+
+        <converters:DayOfWeekToAbbreviatedName x:Key="DayOfWeekToAbbreviatedName" />
+        <converters:DateTimeToDayConverter x:Key="DateTimeToDayConverter" />
+
+        <ControlTemplate x:Key="CalendarWeekDayHeaderControlTemplate">
+            <Label Text="{TemplateBinding DayOfWeek, Converter={StaticResource DayOfWeekToAbbreviatedName}}"
+                   TextColor="LightSlateGray"
+                 
+                   HorizontalOptions="Center"
+                   FontSize="Small" />
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="CalendarDayControlTemplate">
+            <Grid>
+
+                <BoxView Color="Black"
+                         BackgroundColor="Blue"
+                         CornerRadius="5">
+
+                    <BoxView.Triggers>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelected}"
+                                     Value="True">
+                            <Setter Property="Color"
+                                    Value="Green" />
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelectable}"
+                                     Value="False">
+                            <Setter Property="Color"
+                                    Value="Black" />
+                        </DataTrigger>
+
+                    </BoxView.Triggers>
+
+                </BoxView>
+
+                <BoxView Color="White"
+                         BackgroundColor="Black"
+                         Margin="1"
+                         CornerRadius="5">
+
+                    <BoxView.Triggers>
+
+
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelected}"
+                                     Value="True">
+                            <Setter Property="Color"
+                                    Value="Red" />
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelectable}"
+                                     Value="False">
+                            <Setter Property="Color"
+                                    Value="Black" />
+                        </DataTrigger>
+
+                    </BoxView.Triggers>
+
+                </BoxView>
+
+                <Label Text="{TemplateBinding Date, Converter={StaticResource DateTimeToDayConverter}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Medium"
+                       
+                       TextColor="Black">
+
+                    <Label.Triggers>
+
+                        <DataTrigger TargetType="Label"
+                                     Binding="{TemplateBinding IsSelectable}"
+                                     Value="False">
+                            <Setter Property="TextColor"
+                                    Value="Gray" />
+                        </DataTrigger>
+
+                    </Label.Triggers>
+
+                </Label>
+
+                <Ellipse WidthRequest="5"
+                         HeightRequest="5"
+                         VerticalOptions="End"
+                         HorizontalOptions="Center"
+                         Margin="0,0,0,5"
+                           
+                         IsVisible="False"
+                         Stroke="Red"
+                         Fill="Red">
+
+                    <Ellipse.Triggers>
+
+                        <DataTrigger TargetType="Ellipse"
+                                     Binding="{TemplateBinding BindingContext.HasAppointments}"
+                                     Value="True">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+
+                    </Ellipse.Triggers>
+
+                </Ellipse>
+
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="CalendarDayFromOtherMonthControlTemplate">
+            <Grid>
+
+                <BoxView Color="#f2f2f2"
+                            BackgroundColor="Blue"
+                         CornerRadius="5" />
+
+                <Label Text="{TemplateBinding Date, Converter={StaticResource DateTimeToDayConverter}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="Medium"
+                       TextColor="Gray" />
+
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="CalendarDayControlTemplateWeekend">
+            <Grid>
+
+                <BoxView Color="Black"
+                            BackgroundColor="Blue"
+                         CornerRadius="5">
+
+                    <BoxView.Triggers>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelected}"
+                                     Value="True">
+                            <Setter Property="Color"
+                                    Value="Black" />
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelectable}"
+                                     Value="False">
+                            <Setter Property="Color"
+                                    Value="#f2f2f2" />
+                        </DataTrigger>
+
+                    </BoxView.Triggers>
+
+                </BoxView>
+
+                <BoxView Color="Black"
+                         BackgroundColor="Black"
+                         Margin="1"
+                         CornerRadius="5">
+
+                    <BoxView.Triggers>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelected}"
+                                     Value="True">
+                            <Setter Property="Color"
+                                    Value="Black" />
+                        </DataTrigger>
+
+                        <DataTrigger TargetType="BoxView"
+                                     Binding="{TemplateBinding IsSelectable}"
+                                     Value="False">
+                            <Setter Property="Color"
+                                    Value="#f2f2f2" />
+                        </DataTrigger>
+
+                    </BoxView.Triggers>
+
+                </BoxView>
+
+                <Label Text="{TemplateBinding Date, Converter={StaticResource DateTimeToDayConverter}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                          BackgroundColor="Blue"
+                       FontSize="Medium"
+                       TextColor="Black">
+
+                    <Label.Triggers>
+
+                        <DataTrigger TargetType="Label"
+                                     Binding="{TemplateBinding IsSelectable}"
+                                     Value="False">
+                            <Setter Property="TextColor"
+                                    Value="Gray" />
+                        </DataTrigger>
+
+                    </Label.Triggers>
+
+                </Label>
+
+            </Grid>
+        </ControlTemplate>
+
+    </ContentPage.Resources>
+    <ContentPage.Content>
+    
+    <StackLayout>
+            <SearchBar Placeholder="" />
+            <Label Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+          
+            <controls:Calendar x:Name="Calendar"
+                                          DayTapped="Calendar_DayTapped"
+                  Date="01/04/2021"     
+                               BackgroundColor="Blue"
+                     ShowWeekends="True"
+                     ShowDaysFromOtherMonths="True"
+                     FirstDayOfWeek="Sunday"
+                     SelectionMode="SingleSelect"
+                     DayControlTemplate="{StaticResource CalendarDayControlTemplate}"
+                     WeekDayHeaderControlTemplate="{StaticResource CalendarWeekDayHeaderControlTemplate}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
