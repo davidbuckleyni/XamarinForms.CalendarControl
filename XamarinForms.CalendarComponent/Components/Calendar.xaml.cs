@@ -55,8 +55,8 @@ namespace XamarinForms.CalendarComponent.Components
         }
         public bool ShowSpecialDays
         {
-            get => (bool)GetValue(ShowDaysFromOtherMonthsProperty);
-            set => SetValue(ShowDaysFromOtherMonthsProperty, value);
+            get => (bool)GetValue(ShowSpecialDaysProperty);
+            set => SetValue(ShowSpecialDaysProperty, value);
         }
         #endregion
 
